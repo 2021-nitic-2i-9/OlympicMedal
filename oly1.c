@@ -4,7 +4,7 @@ int Lchange;
 
 if (aG<bG)  //aとbの金メダルの比較：
 {
-    Lchange=1;
+    Lchange=0;
 }
 else if (aG==bG)
 {
@@ -21,5 +21,5 @@ else if (aG==bG)
     }    
 }
 
-    return change;
+    return Lchange;
 }

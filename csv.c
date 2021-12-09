@@ -99,6 +99,7 @@ unsigned get_count_countries(void) {
     return count;
 }
 
+// data.csvからデータ取得
 void get_countries_data(type_country_data *data) {
     FILE *FP;
     char str[256];

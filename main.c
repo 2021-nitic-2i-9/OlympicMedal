@@ -9,5 +9,5 @@ int main(void) {
     struct _country_data countries_data[count_countries];
     get_countries_data(countries_data);
 
-	return 0;
+    return 0;
 }

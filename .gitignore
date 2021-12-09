@@ -1,0 +1,7 @@
+*.exe
+*.o
+
+*.csv
+!data.csv
+
+*.old

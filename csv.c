@@ -43,6 +43,7 @@ char *cutcsv(char *input_str) {
         // 末尾かどうか
         if (tmp[i] == '\0') {
             tail_tmp[tail_index] = '\0';
+            if (!isCut) result_tmp[result_index] = '\0';
             break;
         }
 

@@ -64,7 +64,7 @@ void sort(type_country_data *data,int size,int mode){
         break;
     
     default:
-    printf("有効でないモードです\n");
+    printf("Not enabled mode.\n");
         break;
     }
 }

@@ -2,14 +2,15 @@
 #include <string.h>
 #include "type.h"
 char *lower(char *str);
+char *removenl(char *str);
 int namecountry(type_country_data *data, int num) {
     int much,i;
     char name[30];
-    printf("国名を入力して下さい。")
-    scanf("%s",name);
+    printf("Enter Country Name: ");
+    fgets(name, sizeof name, stdin);
     for ( i = 0; i < num; i++)
     {
-        much=strcmp(lower(name),lower(data[i].name));
+        much=strcmp(lower(removenl(name)),lower(data[i].name));
         if (much==0)
         {
             break;
@@ -17,7 +18,7 @@ int namecountry(type_country_data *data, int num) {
     }
     if (much!=0)
     {
-        printf("データがありません。");
+        printf("There is no data.\n");
     }
 
 return i;

@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <time.h>
 #include "type.h"
 
 // 小文字化
@@ -140,4 +141,106 @@ void get_countries_data(type_country_data *data) {
     }
 
     fclose(FP);
+}
+
+// データ書き込み (リセットする場合, isResetを1に)
+void write_countries_data(type_country_data *new_data, int datasize, int isReset) {
+    FILE *FP;
+    time_t t = time(NULL);
+    char oldfilename[64], *filename = "data.csv", *header = "Country,Gold,Silver,Bronze\n";
+    sprintf(oldfilename, "%ld_data.csv.old", t);
+
+    unsigned count_countries = get_count_countries(), writing_datasize = count_countries + datasize, i = 0;
+    struct _country_data old_countries_data[count_countries], writing_countries_data[writing_datasize];
+    get_countries_data(old_countries_data);
+
+    // ファイル名の変更
+    if (rename(filename, oldfilename) != 0) {
+        printf("Error\n");
+        exit(-1);
+    }
+
+    if ((FP = fopen(filename, "w")) == NULL) {
+        printf("Error\n");
+        exit(-1);
+    }
+
+    fprintf(FP, header);
+
+    if (isReset == 1) {
+        for (int i = 0; i <= datasize; i++) {
+            fprintf(FP, "\"%s\",%d,%d,%d\n", removenl(new_data[i].name), new_data[i].gold, new_data[i].silver, new_data[i].bronze);
+        }
+        return;
+    }
+
+    for (i = 0; i < count_countries; i++) {
+        strcpy(writing_countries_data[i].name, old_countries_data[i].name);
+        writing_countries_data[i].gold = old_countries_data[i].gold;
+        writing_countries_data[i].silver = old_countries_data[i].silver;
+        writing_countries_data[i].bronze = old_countries_data[i].bronze;
+    }
+
+    for (int j = 0; j <= datasize; i++, j++) {
+        strcpy(writing_countries_data[i].name, new_data[j].name);
+        writing_countries_data[i].gold = new_data[j].gold;
+        writing_countries_data[i].silver = new_data[j].silver;
+        writing_countries_data[i].bronze = new_data[j].bronze;
+    }
+
+    for (int n = 0; n < writing_datasize; n++) {
+        fprintf(FP, "\"%s\",%d,%d,%d\n", removenl(writing_countries_data[n].name), writing_countries_data[n].gold, writing_countries_data[n].silver, writing_countries_data[n].bronze);
+    }
+}
+
+// 書き込みデータ取得
+void get_writing_data() {
+    int count, isReset, gold, silver, bronze, isEnd, max = 256;
+    struct _country_data writing_countries_data[max];
+    char country_name[256], tmp[8];
+
+    printf("--- Input Data ---\n");
+
+    printf("Enter 1 to overwrite the data: ");
+    fgets(tmp, sizeof(tmp), stdin);
+    isReset = atoi(tmp);
+
+    for (count = 0; count < max; count++) {
+        country_name[0] = '\0';
+        gold = 0;
+        silver = 0;
+        bronze = 0;
+
+        printf("----- %d -----\n", count);
+        printf("Enter Country Name(Alphabet Only): ");
+        fgets(country_name, sizeof(country_name), stdin);
+
+        printf("Enter the number of Gold Medals won: ");
+        fgets(tmp, sizeof(tmp), stdin);
+        gold = atoi(tmp);
+
+        printf("Enter the number of Silver Medals won: ");
+        fgets(tmp, sizeof(tmp), stdin);
+        silver = atoi(tmp);
+
+        printf("Enter the number of Bronze Medals won: ");
+        fgets(tmp, sizeof(tmp), stdin);
+        bronze = atoi(tmp);
+
+        strcpy(writing_countries_data[count].name, country_name);
+        writing_countries_data[count].gold = gold;
+        writing_countries_data[count].silver = silver;
+        writing_countries_data[count].bronze = bronze;
+
+        printf("Enter 1 to exit: ");
+        fgets(tmp, sizeof(tmp), stdin);
+        isEnd = atoi(tmp);
+
+        if (isEnd == 1) break;
+    }
+
+    // 最後の分を追加
+    count++;
+
+    write_countries_data(writing_countries_data, count, isReset);
 }

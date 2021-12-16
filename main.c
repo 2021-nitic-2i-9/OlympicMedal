@@ -52,9 +52,11 @@ int main(void) {
             break;
         // 国別データ表示
         case 4:
+            // メダル順位順に並べ替え
+            sort(countries_data, count_countries, 1);
             index = namecountry(countries_data, count_countries);
             if (index >= count_countries) break;
-            display_data(countries_data, index, 0);
+            display_data(countries_data, index, index + 1);
             break;
         // アルファベット順に表示
         case 5:

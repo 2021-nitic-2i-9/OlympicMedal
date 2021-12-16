@@ -7,8 +7,8 @@ void get_countries_data(type_country_data *data);
 void get_writing_data(void);
 void sort(type_country_data *data,int size,int mode);
 int namecountry(type_country_data *data, int num);
-void display_data(type_country_data *data, int index, int rank);
-void all_data_display(type_country_data *data, int num);
+void display_data(type_country_data *data, int index, int rank, int istotal);
+void all_data_display(type_country_data *data, int num, int istotal);
 
 int main(void) {
     int mode = 0;
@@ -43,12 +43,12 @@ int main(void) {
         // メダル順位表示
         case 2:
             sort(countries_data, count_countries, 1);
-            all_data_display(countries_data, count_countries);
+            all_data_display(countries_data, count_countries, 0);
             break;
         // メダル総数順位表示
         case 3:
             sort(countries_data, count_countries, 0);
-            all_data_display(countries_data, count_countries);
+            all_data_display(countries_data, count_countries, 1);
             break;
         // 国別データ表示
         case 4:
@@ -56,12 +56,12 @@ int main(void) {
             sort(countries_data, count_countries, 1);
             index = namecountry(countries_data, count_countries);
             if (index >= count_countries) break;
-            display_data(countries_data, index, index + 1);
+            display_data(countries_data, index, index + 1, 0);
             break;
         // アルファベット順に表示
         case 5:
             sort(countries_data, count_countries, 2);
-            all_data_display(countries_data, count_countries);
+            all_data_display(countries_data, count_countries, 0);
             break;
         default:
             break;

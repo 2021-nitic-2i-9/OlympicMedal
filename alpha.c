@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <string.h>
+char *lower(char *);
 int alpha(char a[64],char b[64]){
+    a = lower(a);
+    b = lower(b);
     if(strcmp(a,b)==0) return 0;    //全く同じ文字列だった場合に2を出力
     int n=0;
     while(1){                       //ここから無限ループ

@@ -168,7 +168,7 @@ void write_countries_data(type_country_data *new_data, int datasize, int isReset
     fprintf(FP, header);
 
     if (isReset == 1) {
-        for (int i = 0; i <= datasize; i++) {
+        for (int i = 0; i < datasize; i++) {
             fprintf(FP, "\"%s\",%d,%d,%d\n", removenl(new_data[i].name), new_data[i].gold, new_data[i].silver, new_data[i].bronze);
         }
         return;
@@ -211,7 +211,7 @@ void get_writing_data() {
         silver = 0;
         bronze = 0;
 
-        printf("----- %d -----\n", count);
+        printf("----- %d -----\n", count + 1);
         printf("Enter Country Name(Alphabet Only): ");
         fgets(country_name, sizeof(country_name), stdin);
 

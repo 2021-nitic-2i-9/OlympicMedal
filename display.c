@@ -5,7 +5,7 @@
 void display_data(type_country_data *data, int index, int rank) {
     if (rank == 0) printf("%s\n", data[index].name);
     else printf("%d: %s\n", rank, data[index].name);
-    printf("Gold: %2d Silver: %2d Bronze: %2d\n\n", data[index].gold, data[index].silver, data[index].bronze);
+    printf("Gold: %2d Silver: %2d Bronze: %2d\n", data[index].gold, data[index].silver, data[index].bronze);
 }
 
 // すべてのデータを表示

@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <ctype.h>
 #include <time.h>
 #include "type.h"
 
@@ -9,19 +8,19 @@ char *lower(char *str);
 char *removenl(char *str);
 
 // データ区切り(.csv用)
-char *cutcsv(char *input_str) {
-    static char *savedstr;
-    char *result, *tail;
+void csvsplit(char *result, char target[]) {
+    static char savedstr[256];
     char delim = ',';
     char tmp[256], result_tmp[256], tail_tmp[256];
-    char *str = input_str ? removenl(input_str) : savedstr;
+    target = target[0] != '\0' ? target : savedstr;
 
-    if (*str == '\0') {
-        savedstr = '\0';
-        return NULL;
+    if (target[0] == '\0') {
+        strcpy(savedstr, "\0");
+        strcpy(result, target);
+        return;
     }
 
-    strcpy(tmp, str);
+    strcpy(tmp, target);
 
     int isCut = 0, isContent = 0;
     for (int i = 0, result_index = 0, tail_index = 0; i < 256; i++) {
@@ -56,11 +55,8 @@ char *cutcsv(char *input_str) {
         result_index++;
     }
 
-    result = &(result_tmp[0]);
-    tail = &(tail_tmp[0]);
-    savedstr = tail;
-
-    return result;
+    strcpy(result, result_tmp);
+    strcpy(savedstr,tail_tmp);
 }
 
 // 国の数を取得
@@ -89,9 +85,8 @@ unsigned get_count_countries(void) {
 // data.csvからデータ取得
 void get_countries_data(type_country_data *data) {
     FILE *FP;
-    char str[256];
+    char str[256], tmpstr[256], *lowertmp;
     int country_index, gold_index, silver_index, bronze_index;
-    char *tmpstr;
 
     if ((FP = fopen("data.csv", "r")) == NULL) {
         printf("Error\n");
@@ -100,18 +95,19 @@ void get_countries_data(type_country_data *data) {
 
     int i = 0, j = 0;
     while (fgets(str, 256, FP) != NULL) {
-        tmpstr = cutcsv(removenl(str));
+        csvsplit(tmpstr, removenl(str));
         j = 0;
 
         // 区切り
-        while(tmpstr != NULL) {
+        while(tmpstr[0] != '\0') {
             if (i == 0) {
-                tmpstr = lower(tmpstr);
+                lowertmp = &(tmpstr[0]);
+                lowertmp = lower(lowertmp);
                 if (strcmp(tmpstr, "country") == 0) country_index = j;
                 else if (strcmp(tmpstr, "gold") == 0) gold_index = j;
                 else if (strcmp(tmpstr, "silver") == 0) silver_index = j;
                 else if (strcmp(tmpstr, "bronze") == 0) bronze_index = j;
-                tmpstr = cutcsv(NULL);
+                csvsplit(tmpstr, "\0");
                 j++;
                 continue;
             }
@@ -120,7 +116,7 @@ void get_countries_data(type_country_data *data) {
             else if (j == gold_index) data[i - 1].gold = atoi(tmpstr);
             else if (j == silver_index) data[i - 1].silver = atoi(tmpstr);
             else if (j == bronze_index) data[i - 1].bronze = atoi(tmpstr);
-            tmpstr = cutcsv(NULL);
+            csvsplit(tmpstr, "\0");
             j++;
         }
         i++;

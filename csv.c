@@ -5,23 +5,8 @@
 #include <time.h>
 #include "type.h"
 
-// 小文字化
-char *lower(char *str) {
-    char *tmp;
-    for (tmp = str; *tmp; tmp++) {
-        *tmp = tolower(*tmp);
-    }
-    return str;
-}
-
-// 末尾の改行削除
-char *removenl(char *str) {
-    char *tmp;
-    for (tmp = str; *tmp; tmp++) {
-        if (*tmp == 0x0a) *tmp = '\0';
-    }
-    return str;
-}
+char *lower(char *str);
+char *removenl(char *str);
 
 // データ区切り(.csv用)
 char *cutcsv(char *input_str) {

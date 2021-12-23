@@ -6,6 +6,7 @@ struct _country_data {
     int gold;
     int silver;
     int bronze;
+    int rank;
 };
 
 typedef struct _country_data type_country_data;
